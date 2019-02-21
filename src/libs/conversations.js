@@ -1,6 +1,6 @@
 import Pair from "crocks/Pair";
 import prop from "crocks/Maybe/prop";
-import {compose, pick } from "crocks";
+import {compose, pick } from "crocks/helpers";
 import  { map, filter } from "crocks/pointfree";
 
 

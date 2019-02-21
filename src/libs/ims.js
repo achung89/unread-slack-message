@@ -1,4 +1,4 @@
-import { compose } from "crocks";
+import { compose } from "crocks/helpers";
 import { map, filter, merge } from "crocks/pointfree";
 const mapMerge = fn => map(merge(fn));
 
