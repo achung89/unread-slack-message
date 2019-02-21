@@ -1,0 +1,21 @@
+{
+  "name": "slack-notifications",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node -r dotenv/config test.js",
+    "start": "node -r dotenv/config index.js",
+    "debug": "node --inspect-brk=9228 test.js",
+    "deploy": "claudia pack --region us-east-1 --index.handler"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "crocks": "^0.11.1",
+    "dotenv": "^6.2.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2"
+  }
+}
