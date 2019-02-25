@@ -1,19 +1,27 @@
 {
   "name": "unread-slack-message",
   "version": "0.0.1",
-  "description": "",
-  "main": "dist/index.js",
+  "description": "get all unread slack messages for a given auth token",
+  "main": "dist/bundle.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rollup -c"
   },
-  "author": "Andrew Chung",
+  "author": "Andrew Chung <chung.andrew7@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "crocks": "^0.11.1",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.2"
+    "got": "^9.6.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/achung89/unread-slack-message"
+  },
+  "files": ["dist", "src", "index.js", "package.json", "README.md", "LICENSE"],
+  "bugs": {
+    "url": "https://github.com/achung89/unread-slack-message/issues"
+  },
+  "homepage": "https://github.com/achung89/unread-slack-message#readme",
   "devDependencies": {
     "@babel/core": "^7.3.3",
     "@babel/preset-env": "^7.3.1",
