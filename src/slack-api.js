@@ -2,7 +2,9 @@ import {
   filterConversations,
   fetchConversationHistory,
   filterUnreadConversations,
-  foldConversationPairs
+  foldConversationPairs,
+  foldMpimsPairs,
+  getConversationTimeStamps
 } from "./libs/conversations.js";
 import {
   fetchImHistory,
@@ -11,7 +13,7 @@ import {
   foldImPairs
 } from "./libs/ims.js";
 import { getSlack } from "./libs/getSlack.js";
-
+import {filter} from "crocks/pointfree";
 const isIm = ({ is_im }) => is_im;
 const isNotIm = (...args) => !isIm(...args);
 
@@ -22,28 +24,36 @@ export default ({ authToken }) =>
     getAllConvos({ types: "private_channel,public_channel", token: authToken }),
     getAllConvos({ types: "im,mpim", token: authToken })
   ])
-    .then(([channels, dms]) => {
-      const conversations = [...channels, ...dms.filter(isNotIm)];
+    .then(([conversations, dms]) => {
+      const mpims = dms.filter(isNotIm);
       const ims = dms.filter(isIm);
-      return [conversations, ims];
+      return [conversations, mpims, ims];
     })
-    .then(([conversations, ims]) => {
+    .then(([conversations, mpims, ims]) => {
       const unreadConversations = Promise.resolve(conversations)
-        .then(filterConversations)
-        .then(fetchConversationHistory(authToken))
-        .then(filterUnreadConversations)
-        .then(foldConversationPairs);
+                                  .then(filter(({ is_member }) => is_member))
+                                  .then(getConversationTimeStamps(authToken))
+                                  .then(filter(({ last_read }) => last_read))
+                                  .then(fetchConversationHistory(authToken))
+                                  .then(filterUnreadConversations)
+                                  .then(foldConversationPairs);
+      const unreadMpims = Promise.resolve(mpims)
+                            .then(filter(({ is_member, last_read }) => (is_member && last_read)))
+                            .then(fetchConversationHistory(authToken))
+                            .then(filterUnreadConversations)
+                            .then(foldMpimsPairs);
       const unreadIms = Promise.resolve(ims)
         .then(fetchImHistory(authToken))
         .then(filterUnreadIms)
         .then(fetchImUser(authToken))
         .then(foldImPairs);
-      return Promise.all([unreadConversations, unreadIms]);
+      return Promise.all([unreadConversations, unreadIms, unreadMpims]);
     })
-    .then(([conversations, ims]) => {
+    .then(([conversations, ims, mpims]) => {
       return {
         ...conversations,
-        ims
+        ims,
+        mpims,
       };
     });
 
