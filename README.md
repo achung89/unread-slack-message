@@ -12,15 +12,15 @@ const unreadSlackMessage = require('unreadSlackMessage');
 unreadSlackMessage({authToken: process.env.AUTH_TOKEN})
   .then(({mpims, ims, private, public}) => {
     /** mpims | ims | private | public  = {
-     *  name;
-     *  messages: Array<{
-     *    user,
-     *    type,
-     *    subtype,
-     *    ts,
-     *    text
-     * }>
-     * }
+     *    name;
+     *    messages: Array<{
+     *      user,
+     *      type,
+     *      subtype,
+     *      ts,
+     *      text
+     *    }>
+     *  }
      */
   })
 ```
